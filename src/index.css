@@ -1,0 +1,110 @@
+/* ===== Global Design Tokens ===== */
+:root {
+  --bg-deep:    #0d0b1a;
+  --bg-card:    #13102a;
+  --bg-card2:   #1a1535;
+  --border:     rgba(130, 100, 200, 0.25);
+  --border-glow:rgba(212, 175, 55, 0.4);
+  --gold:       #d4af37;
+  --gold-light: #f0d070;
+  --purple:     #9b59b6;
+  --purple-light:#c39bd3;
+  --text:       #e0d8f0;
+  --text-dim:   #8878a8;
+  --text-muted: #4a4060;
+  --accent:     #b388ff;
+  --danger:     #ff6b6b;
+
+  --radius:     16px;
+  --shadow-card:0 8px 32px rgba(0,0,0,0.5), 0 0 60px rgba(100,60,200,0.08);
+  --shadow-glow:0 0 30px rgba(212,175,55,0.2);
+
+  font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Meiryo', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text);
+  background: var(--bg-deep);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Reset ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { background: var(--bg-deep); }
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3 {
+  color: var(--gold);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+input, select {
+  font-family: inherit;
+  color: var(--text);
+  background: transparent;
+}
+
+/* ===== Utility ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2.5rem;
+  background: linear-gradient(135deg, #7c3aed, #9b59b6);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border-radius: 50px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(124,58,237,0.6);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.8rem;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  transition: all 0.25s ease;
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  border-color: var(--purple-light);
+  background: rgba(155,89,182,0.1);
+}
