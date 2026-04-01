@@ -27,7 +27,11 @@ async function generateWithFallback(ai, prompt) {
         contents: prompt,
         config,
       });
-      return response.text();
+      // @google/genai SDK では .text はプロパティ（メソッドではない）
+      const text = typeof response.text === "function"
+        ? response.text()
+        : response.text;
+      return text;
     } catch (e) {
       const isNotFound =
         e?.message?.includes("not found") ||
