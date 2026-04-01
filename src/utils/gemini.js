@@ -8,7 +8,39 @@ function getClient() {
   return new GoogleGenAI({ apiKey });
 }
 
-// Gemini 2.5 Flash thinking mode で数秘術の鑑定文を生成
+// thinking対応モデルを順に試して最初に成功したものを使う
+const THINKING_MODELS = [
+  { model: "gemini-2.5-flash", thinking: true },
+  { model: "gemini-2.5-pro", thinking: true },
+  { model: "gemini-2.0-flash-thinking-exp", thinking: true },
+  { model: "gemini-2.0-flash", thinking: false },
+];
+
+async function generateWithFallback(ai, prompt) {
+  for (const { model, thinking } of THINKING_MODELS) {
+    try {
+      const config = thinking
+        ? { thinkingConfig: { thinkingBudget: 8000 }, temperature: 1.0 }
+        : { temperature: 1.0 };
+      const response = await ai.models.generateContent({
+        model,
+        contents: prompt,
+        config,
+      });
+      return response.text();
+    } catch (e) {
+      const isNotFound =
+        e?.message?.includes("not found") ||
+        e?.message?.includes("NOT_FOUND") ||
+        e?.status === 404;
+      if (!isNotFound) throw e;
+      // 次のモデルを試す
+    }
+  }
+  throw new Error("利用可能なGeminiモデルが見つかりませんでした");
+}
+
+// Gemini thinking mode で数秘術の鑑定文を生成
 export async function generateReading(name, dateStr, numbers) {
   const ai = getClient();
 
@@ -36,17 +68,7 @@ export async function generateReading(name, dateStr, numbers) {
   "luckyItems": ["ラッキーアイテム1", "ラッキーアイテム2", "ラッキーアイテム3"]
 }`;
 
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash-preview-04-17",
-    contents: prompt,
-    config: {
-      thinkingConfig: { thinkingBudget: 8000 },
-      temperature: 1.0,
-    },
-  });
-
-  const text = response.text();
-  // JSON部分を抽出
+  const text = await generateWithFallback(ai, prompt);
   const match = text.match(/\{[\s\S]*\}/);
   if (!match) throw new Error("レスポンスの解析に失敗しました");
   return JSON.parse(match[0]);
