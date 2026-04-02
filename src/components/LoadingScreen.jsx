@@ -26,13 +26,6 @@ export default function LoadingScreen({ formData, onComplete }) {
           setStep((s) => Math.min(s + 1, STEPS.length - 1));
         }, 2000);
 
-        // Gemini APIキーを設定
-        const apiKey = formData.apiKey || window.__GEMINI_API_KEY__;
-        if (apiKey) {
-          // import.meta.envは書き換えられないので、グローバル経由で渡す
-          window.__GEMINI_API_KEY__ = apiKey;
-        }
-
         // 数秘術計算
         const numbers = calcAll(formData.name, formData.date);
 

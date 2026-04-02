@@ -4,9 +4,6 @@ import "./InputForm.css";
 export default function InputForm({ onSubmit }) {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
-  const [apiKey, setApiKey] = useState(
-    localStorage.getItem("gemini_api_key") || ""
-  );
   const [error, setError] = useState("");
 
   function handleSubmit(e) {
@@ -15,14 +12,8 @@ export default function InputForm({ onSubmit }) {
 
     if (!name.trim()) { setError("お名前を入力してください"); return; }
     if (!date) { setError("生年月日を入力してください"); return; }
-    if (!apiKey.trim()) { setError("Gemini APIキーを入力してください"); return; }
 
-    localStorage.setItem("gemini_api_key", apiKey.trim());
-
-    // env変数として設定（ランタイム）
-    window.__GEMINI_API_KEY__ = apiKey.trim();
-
-    onSubmit({ name: name.trim(), date, apiKey: apiKey.trim() });
+    onSubmit({ name: name.trim(), date });
   }
 
   return (
@@ -67,32 +58,6 @@ export default function InputForm({ onSubmit }) {
                 max={new Date().toISOString().split("T")[0]}
               />
             </div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="apikey">
-              Gemini API キー
-              <a
-                className="api-link"
-                href="https://aistudio.google.com/apikey"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                取得する →
-              </a>
-            </label>
-            <div className="input-wrapper">
-              <span className="input-icon">🔑</span>
-              <input
-                id="apikey"
-                type="password"
-                placeholder="AIza..."
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                autoComplete="off"
-              />
-            </div>
-            <p className="input-hint">キーはブラウザにのみ保存されます</p>
           </div>
 
           {error && <p className="form-error">⚠ {error}</p>}
